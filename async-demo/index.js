@@ -32,12 +32,25 @@ console.log("Before");
 // const commits = getCommits(repos[0]);
 
 // Replace Callback with Promises to avoid callback hell
-getUser(1)
-  .then((user) => getRepositories(user.githubUsername))
-  .then((repos) => getCommits(repos[0]))
-  .then((commits) => console.log("Commits", commits))
-  .catch((err) => console.log("Error: ", err.message));
+// getUser(1)
+//   .then((user) => getRepositories(user.githubUsername))
+//   .then((repos) => getCommits(repos[0]))
+//   .then((commits) => console.log("Commits", commits))
+//   .catch((err) => console.log("Error: ", err.message));
 
+// Async- await approach
+async function displayCommits() {
+  try {
+    const user = await getUser(1);
+    const repos = await getRepositories(user.githubUsername);
+    const commits = await getCommits(repos[0]);
+    console.log(commits);
+  } catch (err) {
+    console.log("Error: ", err.message);
+  }
+}
+
+displayCommits();
 console.log("After");
 
 function getUser(id) {
@@ -54,6 +67,7 @@ function getRepositories(username) {
     setTimeout(() => {
       console.log(`Extracting Repositories for ${username}....`);
       resolve(["repo1", "repo2", "repo3"]);
+      // reject(new Error("Error occured in repositories"));
     }, 2000);
   });
 }
